@@ -1,0 +1,205 @@
+__CONFIG _CP_OFF & _WDT_OFF & _PWRTE_ON & _XT_OSC
+list p=16F84A
+#include "p16F84A.inc"
+
+ESTADO	EQU		0x03
+PORTA	EQU		0x05
+PORTB	EQU		0x06
+TRISA	EQU		0x85
+TRISB	EQU		0x86
+CONT0	EQU		0x0C
+CONT1	EQU		0x0D
+MONTO	EQU		0x0E
+AUX		EQU		0x0F
+AUX2	EQU		1CH
+
+#DEFINE LEDROJO	PORTB,3;		para definir nuestras salidas y 
+#DEFINE LEDROJO2	PORTB,4;	usarlas mas facilmente
+#DEFINE	LEDAMAR	PORTB,5
+#DEFINE	LEDVERD	PORTB,6
+#DEFINE LEDAZUL	PORTB,7
+
+		ORG		0x00
+		GOTO	INICIO
+INICIO	BSF		ESTADO,5		; BANK1
+		CLRF	TRISA			; RA0-RA2 -> Display	
+		BSF		TRISA,3			; RA3<- ENTRADA SELECTCAFE
+		BSF		TRISA,4			; RA4<- ENTRADA START
+		CLRF	TRISB			; RB4-RB7-> LR LA LV LAZ LR
+		BSF		TRISB,0			; RB0<-ENTRADA MONEDA1BS
+		BSF		TRISB,1			; RB1<-ENTRADA MONEDA2BS
+		BSF		TRISB,2			; RB2<-ENTRADA MONEDA5BS
+		BCF		ESTADO,5		; BANK0
+
+START	CLRF	PORTA			; DP=0
+		CLRF	PORTB			; LR=LA=LV=LAZ=LR=OFF
+		CLRF	MONTO			; MONEY=0
+		CLRF	AUX				; AUX=0
+		CLRF	AUX2
+ES1BS	CALL	SELECCAFE
+		BTFSC	PORTB,0			; MONEDA1BS=0?							SWITCH 1 BS
+		GOTO	ES2BS
+		CALL	DELAY
+		MOVLW	0x07			; W<-7
+		BCF		ESTADO,0		; C=0;
+		SUBWF	MONTO,0			; W=MONEY-W
+		BTFSC	ESTADO,0		; C=0? - MONEY<7?	
+		GOTO	MONTODEMAS		; RECHAZA LA MONEDA  
+		MOVLW	0x01			; W<-1
+		ADDWF	MONTO,1			; MONTO=MONTO+1BS
+		GOTO	MOSTRAR
+ES2BS	CALL	SELECCAFE
+		BTFSC	PORTB,1			; MONEDA2BS=0?							SWITCH 2 BS
+		GOTO	ES5BS
+		CALL	DELAY
+		MOVLW	0x06			; W<-6
+		BCF		ESTADO,0		; C=0;
+		SUBWF	MONTO,0			; W=MONTO-6
+		BTFSC	ESTADO,0		; C=0? - MONEY<6?	
+		GOTO	MONTODEMAS		; RECHAZA LA MONEDA
+		MOVLW	0x02			; W<-2
+		ADDWF	MONTO,1			; MONTO=MONTO+2BS
+		GOTO	MOSTRAR
+ES5BS	CALL	SELECCAFE
+		BTFSC	PORTB,2			; SW5BS=0?							SWITCH 5 BS
+		GOTO	ES1BS
+		CALL	DELAY
+		MOVLW	0x05			; W<-3
+		BCF		ESTADO,0		; C=0;
+		SUBWF	MONTO,0			; W=MONEY-W
+		BTFSC	ESTADO,0		; C=0? - MONEY<3?	
+		GOTO	MONTODEMAS			; RECHAZA LA MONEDA 
+		MOVLW	0x05			; W<-5
+		ADDWF	MONTO,1			; MONEY=MONEY+W
+		GOTO	MOSTRAR
+MOSTRAR MOVF	MONTO,0			; W=MONEY						MOSTRAR CANTIDAD DE DINERO
+		MOVWF	PORTA			; DP=W
+		GOTO	ES1BS
+MONTODEMAS
+		BSF		LEDAZUL			; LED CAMBIO=ON
+		CALL	DELAY
+		BCF		LEDAZUL			; LED CAMBIO=OFF
+		GOTO	ES1BS
+SELECCAFE
+		CALL	START2
+		BTFSC	PORTA,3			; MONEDA1BS=0?							SWITCH 1 BS
+		RETURN
+		CALL	DELAY
+		MOVLW	0x01			; W<-1
+		ADDWF	AUX,1			; MONTO=MONTO+1BS
+		CALL	CHECK
+
+		GOTO	MOSTRAR2
+		
+CHECK;							PARA QUE EL SW SELEC NO SE PASE DE 4
+		MOVLW	0x05			; W<-5
+		BCF		ESTADO,0		; C=0;
+		SUBWF	AUX,0			; W=MONEY-W
+		BTFSS	ESTADO,0		; C=0? - MONEY<5?	
+		RETURN;					SI NO retorna
+		CLRF	AUX;			;si si borra la variable select
+		CLRF	PORTA
+		RETURN
+MOSTRAR2
+		MOVF	AUX,0			; W=MONEY		muestra el dinero
+		MOVWF	PORTA			; DP=W
+		GOTO	SELECCAFE;		vamos a seleccionar que cafe
+START2;							se apreto start??
+		BTFSC	PORTA,4
+		RETURN;					si no sigue en lo que estaba
+		MOVF	MONTO,0;		si si, hace  w<-monto
+		MOVWF	AUX2
+		MOVF	MONTO,AUX2; HACEMOS AUXTEM<-CONTEMP
+CAFEPURO
+		BCF		ESTADO,0		; C=0;
+		MOVLW	0x01			; W<-1
+		SUBWF	MONTO,W			; W=MONEY-W
+		BTFSS	ESTADO,0		; C=1? - MONEY>=1?	
+		GOTO	ES1BS;			si no vuelve a pedir dinero
+		BCF		ESTADO,2;		si si, continua
+		MOVLW	0X01;			w<-1
+		SUBWF	AUX,W			;AUX es 1?
+		BTFSS	ESTADO,2
+		GOTO	CAFELECHE;	si no pregunta el siguiente
+		BSF		LEDROJO;		si si prende el led ROJO y devuelve el cambio
+		GOTO	CUANTODECAMBIO
+CAFELECHE
+		BCF		ESTADO,0		; C=0;
+		MOVLW	0x02			; W<-2
+		SUBWF	MONTO,W			; W=MONEY-W
+		BTFSS	ESTADO,0		; C=1? - MONEY>=2?	
+		GOTO	ES1BS;			si no vuelve a pedir dinero
+		BCF		ESTADO,2;		si si, continua
+		MOVLW	0X02;			w<-2
+		SUBWF	AUX,W			;AUX es 2?
+		BTFSS	ESTADO,2
+		GOTO	CAFEEXPRESS;	si no pregunta el siguiente
+		BSF		LEDAMAR;		si si prende el led AMARILLO y devuelve el cambio
+		GOTO	CUANTODECAMBIO
+CAFEEXPRESS
+		BCF		ESTADO,0		; C=0;
+		MOVLW	0x03			; W<-3
+		SUBWF	MONTO,W			; W=MONEY-W
+		BTFSS	ESTADO,0		; C=1? - MONEY>=3?	
+		GOTO	ES1BS;			si no vuelve a pedir dinero
+		BCF		ESTADO,2;		si si, continua
+		MOVLW	0X03;			w<-3
+		SUBWF	AUX,W			;AUX es 3?
+		BTFSS	ESTADO,2
+		GOTO	CAFECAPUCCINO;	si no pregunta el siguiente
+		BSF		LEDVERD;		si si prende el led verde y devuelve el cambio
+		GOTO	CUANTODECAMBIO
+CAFECAPUCCINO
+		BCF		ESTADO,0		; C=0;
+		MOVLW	0x04			; W<-4
+		SUBWF	MONTO,W			; W=MONEY-W
+		BTFSS	ESTADO,0		; C=1? - MONEY>=4?	
+		GOTO	ES1BS;			si no vuelve a pedir dinero
+		BCF		ESTADO,2;		si si, continua
+		MOVLW	0X04;			w<-4
+		SUBWF	AUX,W			;AUX es 4?
+		BTFSS	ESTADO,2
+		GOTO	CAFEEXPRESS;	si no pregunta el siguiente
+		BSF		LEDROJO2;		si si prende el led ROJO2 y devuelve el cambio
+CUANTODECAMBIO
+		BCF		ESTADO,2;		borramos zero de status
+		MOVF	AUX,0;			movemos el aux a W
+		SUBWF	MONTO,W;		hacemos monto-w
+CAMBIO	MOVWF	MONTO;			movemos el resultado de la resta a w
+		BSF		LEDAZUL			; prendemos el led azul de devolver cambio                                          SI HAY CAMBIO ENCIENDE LA LUZ DE CAMBIO
+SINC	MOVF	MONTO,0			; W<-MONEY									SI NO HAY CAMBIO VIENE ACA
+		MOVWF	PORTA			; DP<-W
+		CALL 	DELAY2
+		CALL 	DELAY2
+		CALL 	DELAY2
+
+		GOTO	START
+RETURN
+
+DELAY	MOVLW	0xFF; 			;*DELAY		
+		MOVWF	CONT0
+J2		MOVLW	0xFF
+		MOVWF	CONT1
+J1		DECF	CONT1,1
+		MOVLW	0x00			; W<-0
+		BCF		ESTADO,2		; Z<-0
+		SUBWF	CONT1,0			; W<-RESULTADO SI W=0 SO Z=1
+		BTFSS	ESTADO,2		; Z=1?
+		GOTO 	J1
+		DECF	CONT0,1
+		MOVLW	0x00			; W<-0
+		BCF		ESTADO,2		; Z<-0
+		SUBWF	CONT0,0			; W<-RESULTADO SI W=0 SO Z=1
+		BTFSS	ESTADO,2		; Z=1?
+		GOTO 	J2
+		RETURN
+DELAY2
+		CALL	DELAY
+		CALL	DELAY
+RETURN
+
+		END
+		
+		
+			
+		

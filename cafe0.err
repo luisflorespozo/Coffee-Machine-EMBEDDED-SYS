@@ -1,0 +1,34 @@
+Warning[205] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 1 : Found directive in column 1. (__CONFIG)
+Warning[215] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 2 : Processor superseded by command line.  Verify processor symbol.
+Message[301] C:\PROGRAM FILES (X86)\MICROCHIP\MPASM SUITE\P16F877A.INC 37 : MESSAGE: (Processor-header file mismatch.  Verify selected processor.)
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 30 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 31 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 32 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 33 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 34 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 35 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 36 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 37 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 38 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 41 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 42 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[202] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 125 : Argument out of range.  Least significant bits used.
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 197 : Found opcode in column 1. (CALL)
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 199 : Found opcode in column 1. (RETURN)
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 208 : Found opcode in column 1. (CALL)
+Warning[202] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 211 : Argument out of range.  Least significant bits used.
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 214 : Found opcode in column 1. (CALL)
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 215 : Found opcode in column 1. (RETURN)
+Warning[202] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 219 : Argument out of range.  Least significant bits used.
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 222 : Found opcode in column 1. (RETURN)
+Warning[202] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 226 : Argument out of range.  Least significant bits used.
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 229 : Found opcode in column 1. (RETURN)
+Warning[202] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 232 : Argument out of range.  Least significant bits used.
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 235 : Found opcode in column 1. (RETURN)
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 249 : Found opcode in column 1. (GOTO)
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 265 : Found opcode in column 1. (GOTO)
+Message[313] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\LCD_MENS.INC 11 : CBLOCK constants will start with a value of 0.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\LCD_4BIT.INC 52 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\LCD_4BIT.INC 95 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\LCD_4BIT.INC 107 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[203] C:\USERS\WIN7\DESKTOP\P8_CAFETERA\CAFE0.ASM 299 : Found opcode in column 1. (RETURN)
